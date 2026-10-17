@@ -2,59 +2,14 @@ import { useContext } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
 
 export default function AppMenu() {
-  const { setRoute } = {
-    setRoute: (route) => {
-      window.location.href = route;
-    },
-  };
   const { toggleTheme } = useContext(ThemeContext);
 
   return (
-    <header className="d-flex justify-content-center py-3">
+    <header className="d-flex justify-content-center py-3 watch-menu">
       <div className="container">
         <ul className="nav nav-pills gap-1 align-items-center justify-content-start">
-          <li className="nav-item">
-            <button
-              onClick={() => {
-                setRoute("/");
-              }}
-              className="nav-link"
-            >
-              Home
-            </button>
-          </li>
-
-          <li className="nav-item">
-            <button
-              onClick={() => {
-                setRoute("/speakers");
-              }}
-              className="nav-link"
-            >
-              Speakers
-            </button>
-          </li>
-
-          <li className="nav-item">
-            <button
-              onClick={() => {
-                setRoute("/speakerlist");
-              }}
-              className="nav-link"
-            >
-              Speaker List
-            </button>
-          </li>
-          <li className="nav-item">
-            <button
-              onClick={() => {
-                setRoute("/about");
-              }}
-              className="nav-item nav-link"
-            >
-              About
-            </button>
-          </li>
+          <li className="nav-item"><a className="nav-link" href="/">Home</a></li>
+          <li className="nav-item"><a className="nav-link" href="/watches">Product List</a></li>
           <li>
             <input
               type="checkbox"
@@ -62,9 +17,7 @@ export default function AppMenu() {
               autoComplete="off"
               id="themeToggle"
               defaultChecked={false}
-              onClick={() => {
-                toggleTheme();
-              }}
+              onClick={toggleTheme}
             />
             <label htmlFor="themeToggle" className="themeToggleCheckbox-label">
               <i className="fas fa-moon"></i>

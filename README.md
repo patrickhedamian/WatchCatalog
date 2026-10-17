@@ -1,13 +1,31 @@
-# pluralsight-using-hooks-in-react
+# Watch Catalog
 
-This is from the last code in m9-050 and then
-modified to have new site.css and /components/topSpeakers
+A Next.js watch catalog with a four-product featured carousel, searchable product list, watch details, and create, edit, and delete flows.
 
-removed /pages wildcard route and created
-/src/app wildcard route
+## Run locally
 
+```sh
+npm install
+npm run dev
+```
 
+## Run tests
 
+```sh
+npm test
+```
 
+The Vitest and React Testing Library suite covers the mocked product-list API, watch details, create/update/delete requests, deletion from the visible list, and required-field validation.
 
+## Routes
 
+- `/` — home and featured watch carousel
+- `/watches` — searchable product list
+- `/watch` — choose a watch to view
+- `/watch/{watchId}` — watch details
+- `/watches/add` — add a product
+- `/watches/edit` and `/watches/edit/{watchId}` — choose or edit a product
+- `/watches/delete` and `/watches/delete/{watchId}` — choose or delete a product
+- `/error` — example not-found page
+
+Watch data is stored in `db.json` with product number, name, model, descriptions, PHP price, movement, chronograph, dimensions, weight, jewel count, case material, and strap material. The `/api/watches` endpoints provide CRUD operations, and Redux Toolkit manages the catalog state in the browser.
