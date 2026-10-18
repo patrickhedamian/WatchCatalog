@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchWatches } from "../../store/watchesSlice";
 import WatchCarousel from "./WatchCarousel";
-import styles from "./Home.module.css";
+import LoadingOverlay from "../LoadingOverlay";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -34,14 +34,7 @@ export default function Home() {
   }, [items, status]);
 
   if (status === "loading" || status === "idle") {
-    return (
-      <main className={styles.loadingOverlay} role="status">
-        <div className={styles.loadingIndicator}>
-          <i className="fas fa-spinner fa-spin" aria-hidden="true" />
-          <span>Loading watches...</span>
-        </div>
-      </main>
-    );
+    return <LoadingOverlay message="Loading watches..." />;
   }
   if (status === "failed") {
     return <main className="container py-5" role="alert">Unable to load watches: {error}</main>;

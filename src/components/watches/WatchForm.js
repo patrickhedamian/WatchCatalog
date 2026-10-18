@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createWatch, fetchWatches, updateWatch } from "../../store/watchesSlice";
+import LoadingOverlay from "../LoadingOverlay";
 
 const emptyWatch = {
   productNumber: "",
@@ -67,7 +68,7 @@ export default function WatchForm({ watchId }) {
   }
 
   if (status === "loading" || status === "idle") {
-    return <main className="container py-5" role="status">Loading watch form...</main>;
+    return <LoadingOverlay message="Loading watch form..." />;
   }
   if (status === "failed") {
     return <main className="container py-5" role="alert">Unable to load watches: {error}</main>;

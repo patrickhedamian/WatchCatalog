@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteWatch, fetchWatches } from "../../store/watchesSlice";
+import LoadingOverlay from "../LoadingOverlay";
 
 export default function DeleteWatchPage({ id }) {
   const dispatch = useDispatch();
@@ -28,7 +29,7 @@ export default function DeleteWatchPage({ id }) {
   }
 
   if (status === "loading" || status === "idle") {
-    return <main className="container py-5" role="status">Loading watch...</main>;
+    return <LoadingOverlay message="Loading watch..." />;
   }
   if (status === "failed") {
     return <main className="container py-5" role="alert">Unable to load watch: {loadError}</main>;
