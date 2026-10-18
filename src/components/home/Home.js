@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchWatches } from "../../store/watchesSlice";
 import WatchCarousel from "./WatchCarousel";
-import SignupForm from "./SignupForm";
+import styles from "./Home.module.css";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -34,7 +34,14 @@ export default function Home() {
   }, [items, status]);
 
   if (status === "loading" || status === "idle") {
-    return <main className="container py-5" role="status">Loading watches...</main>;
+    return (
+      <main className={styles.loadingOverlay} role="status">
+        <div className={styles.loadingIndicator}>
+          <i className="fas fa-spinner fa-spin" aria-hidden="true" />
+          <span>Loading watches...</span>
+        </div>
+      </main>
+    );
   }
   if (status === "failed") {
     return <main className="container py-5" role="alert">Unable to load watches: {error}</main>;
@@ -53,7 +60,6 @@ export default function Home() {
         currentSlide={currentSlide}
         setCurrentSlide={setCurrentSlide}
       />
-      <SignupForm />
     </main>
   );
 }

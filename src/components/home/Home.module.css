@@ -1,0 +1,21 @@
+.loadingOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.loadingIndicator {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #181827;
+  font-size: 1.125rem;
+}
+
+.loadingIndicator i {
+  color: #04b1b8;
+  font-size: 1.75rem;
+}
