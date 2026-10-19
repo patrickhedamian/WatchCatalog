@@ -17,6 +17,18 @@ npm test
 
 The Vitest and React Testing Library suite covers the mocked product-list API, watch details, create/update/delete requests, deletion from the visible list, and required-field validation.
 
+## Deploy to Azure Static Web Apps
+
+The app uses client-side routing, so direct requests to routes such as `/watches`
+must serve the exported app shell. The
+[`staticwebapp.config.json`](./public/staticwebapp.config.json) file configures
+that fallback and is copied into the `out` deployment directory during the
+Next.js static export.
+
+Azure Static Web Apps hosts the static export, not the Next.js `pages/api`
+handlers. The `/api/watches` endpoints therefore need a separately deployed API
+before catalog data operations will work in Azure.
+
 ## Routes
 
 - `/` — home and featured watch carousel
