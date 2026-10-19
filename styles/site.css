@@ -512,6 +512,18 @@ header.hero {
   font-weight: 600;
 }
 
+.mutation-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--dark);
+  font-weight: 600;
+}
+
+.mutation-progress .fa-spinner {
+  color: var(--primary);
+}
+
 .watch-form [aria-invalid="true"] {
   border-color: #b42318;
 }

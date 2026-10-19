@@ -55,7 +55,12 @@ export default function DeleteWatchPage({ id }) {
           <button className="btn btn-danger" type="button" onClick={confirmDelete} disabled={deleting} aria-busy={deleting}>
             {deleting ? "Deleting..." : "Confirm Delete"}
           </button>
-          {deleting && <span role="status">Deleting watch...</span>}
+          {deleting && (
+            <span className="mutation-progress" role="status" aria-live="polite">
+              <i className="fas fa-spinner fa-spin" aria-hidden="true" />
+              Deleting watch...
+            </span>
+          )}
           <a className="btn btn-outline-secondary" href={`/watch/${id}`}>Cancel</a>
         </div>
       </div>

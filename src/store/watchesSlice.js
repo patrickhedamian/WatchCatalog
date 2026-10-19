@@ -3,9 +3,23 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 const API_URL = "https://react-demo-enach4akbkerc5b3.southeastasia-01.azurewebsites.net/api/products";
 const CURRENCY = "PHP";
 
-async function requestJson(url, options) {
+async function requestJson(url, options, { allowEmpty = false } = {}) {
   const response = await fetch(url, options);
-  const data = await response.json();
+  const responseBody = await response.text();
+  let data = null;
+
+  if (responseBody.trim()) {
+    try {
+      data = JSON.parse(responseBody);
+    } catch {
+      if (response.ok) {
+        throw new Error(`Expected a JSON response from ${url}.`);
+      }
+    }
+  } else if (response.ok && !allowEmpty) {
+    throw new Error(`Expected a JSON response from ${url}.`);
+  }
+
   if (!response.ok) {
     throw new Error(data?.error || `Request failed with status ${response.status}`);
   }
@@ -50,7 +64,7 @@ export const updateWatch = createAsyncThunk("watches/update", ({ id, ...changes 
 );
 
 export const deleteWatch = createAsyncThunk("watches/delete", (id) =>
-  requestJson(`${API_URL}/${id}`, { method: "DELETE" }).then(() => id),
+  requestJson(`${API_URL}/${id}`, { method: "DELETE" }, { allowEmpty: true }).then(() => id),
 );
 
 const watchesSlice = createSlice({

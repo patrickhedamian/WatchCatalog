@@ -28,7 +28,7 @@ const numericFields = ["price", "weight", "height", "diameter", "thickness", "je
 
 export default function WatchForm({ watchId }) {
   const dispatch = useDispatch();
-  const { items, status, error } = useSelector((state) => state.watches);
+  const { items, status, mutationStatus, error } = useSelector((state) => state.watches);
   const [form, setForm] = useState(emptyWatch);
   const [submitError, setSubmitError] = useState("");
   const [invalidFields, setInvalidFields] = useState([]);
@@ -111,6 +111,7 @@ export default function WatchForm({ watchId }) {
       </div>
       <form
         className="watch-form"
+        aria-busy={mutationStatus === "loading"}
         onSubmit={handleSubmit}
         onInvalidCapture={(event) => {
           const fieldName = event.target.name;
@@ -202,8 +203,16 @@ export default function WatchForm({ watchId }) {
           )}
         </label>
         {submitError && <p className="alert alert-danger" role="alert" tabIndex="-1">{submitError}</p>}
+        {mutationStatus === "loading" && (
+          <p className="mutation-progress" role="status" aria-live="polite">
+            <i className="fas fa-spinner fa-spin" aria-hidden="true" />
+            {isEditing ? "Saving watch..." : "Adding watch..."}
+          </p>
+        )}
         <div className="watch-form-actions">
-          <button className="btn btn-accent" type="submit">{isEditing ? "Save Changes" : "Add Watch"}</button>
+          <button className="btn btn-accent" type="submit" disabled={mutationStatus === "loading"}>
+            {isEditing ? "Save Changes" : "Add Watch"}
+          </button>
           <a className="btn btn-outline-secondary" href="/watches">Cancel</a>
         </div>
       </form>

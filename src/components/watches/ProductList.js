@@ -64,7 +64,12 @@ export default function ProductList() {
       {(actionError || (mutationStatus === "failed" && error)) && (
         <p className="alert alert-danger" role="alert">{actionError || error}</p>
       )}
-      {mutationStatus === "loading" && <p role="status">Saving catalog changes...</p>}
+      {mutationStatus === "loading" && (
+        <p className="mutation-progress" role="status" aria-live="polite">
+          <i className="fas fa-spinner fa-spin" aria-hidden="true" />
+          Deleting watch...
+        </p>
+      )}
       <ul className="watch-grid" aria-label="Catalog watches">
         {filteredWatches.map((watch) => (
           <li key={watch.id}>

@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import ProductList from "../ProductList";
@@ -60,8 +60,16 @@ function createResponse(data, status = 200) {
   return {
     ok: status >= 200 && status < 300,
     status,
-    json: async () => data,
+    text: async () => data === undefined ? "" : JSON.stringify(data),
   };
+}
+
+function createDeferred() {
+  let resolve;
+  const promise = new Promise((resolvePromise) => {
+    resolve = resolvePromise;
+  });
+  return { promise, resolve };
 }
 
 function createStore() {
@@ -118,7 +126,7 @@ describe("watch catalog components", () => {
           return createResponse(JSON.parse(options.body));
         }
         if (url.startsWith(`${productsApiUrl}/`) && method === "DELETE") {
-          return createResponse({ id: Number(url.split("/").pop()) });
+          return createResponse(undefined, 204);
         }
         return createResponse({ error: "Unexpected request" }, 404);
       }),
@@ -216,6 +224,24 @@ describe("watch catalog components", () => {
     expect(JSON.parse(request.body)).not.toHaveProperty("name");
   });
 
+  it("shows a loading indicator while adding a watch", async () => {
+    const response = createDeferred();
+    renderWithStore(<WatchForm watchId={null} />);
+
+    await screen.findByRole("heading", { name: "Add Watch" });
+    fillWatchForm();
+    fetch.mockImplementationOnce(() => response.promise);
+    fireEvent.submit(screen.getByRole("button", { name: "Add Watch" }).closest("form"));
+
+    expect(await screen.findByRole("status")).toHaveTextContent("Adding watch...");
+    expect(screen.getByRole("button", { name: "Add Watch" })).toBeDisabled();
+    await act(async () => {
+      response.resolve(createResponse({ ...JSON.parse(fetch.mock.calls[fetch.mock.calls.length - 1][1].body), id: 3 }));
+      await response.promise;
+    });
+    await waitFor(() => expect(screen.getByRole("button", { name: "Add Watch" })).not.toBeDisabled());
+  });
+
   it("submits edited product data in an update API request", async () => {
     renderWithStore(<WatchForm watchId={1} />);
 
@@ -242,6 +268,23 @@ describe("watch catalog components", () => {
     expect(JSON.parse(request.body)).not.toHaveProperty("name");
   });
 
+  it("shows a loading indicator while saving an edited watch", async () => {
+    const response = createDeferred();
+    renderWithStore(<WatchForm watchId={1} />);
+
+    await screen.findByLabelText("Model");
+    fetch.mockImplementationOnce(() => response.promise);
+    fireEvent.submit(screen.getByRole("button", { name: "Save Changes" }).closest("form"));
+
+    expect(await screen.findByRole("status")).toHaveTextContent("Saving watch...");
+    expect(screen.getByRole("button", { name: "Save Changes" })).toBeDisabled();
+    await act(async () => {
+      response.resolve(createResponse({ ...sampleWatches[0] }));
+      await response.promise;
+    });
+    await waitFor(() => expect(screen.getByRole("button", { name: "Save Changes" })).not.toBeDisabled());
+  });
+
   it("deletes a product and removes it from the displayed list", async () => {
     renderWithStore(<ProductList />);
 
@@ -257,6 +300,24 @@ describe("watch catalog components", () => {
     });
     expect(confirm).toHaveBeenCalledWith("Delete this watch from the catalog?");
     expect(screen.getByRole("heading", { name: "Speedmaster Moonwatch" })).toBeInTheDocument();
+  });
+
+  it("shows a loading indicator while deleting a watch from the product list", async () => {
+    const response = createDeferred();
+    renderWithStore(<ProductList />);
+
+    const deleteButton = await screen.findByRole("button", { name: "Delete Rolex Submariner Date" });
+    fetch.mockImplementationOnce(() => response.promise);
+    fireEvent.click(deleteButton);
+
+    expect(await screen.findByText("Deleting watch...")).toBeInTheDocument();
+    await act(async () => {
+      response.resolve(createResponse(undefined, 204));
+      await response.promise;
+    });
+    await waitFor(() => {
+      expect(screen.queryByRole("heading", { name: "Submariner Date" })).not.toBeInTheDocument();
+    });
   });
 
   it("marks required product fields invalid and exposes their validation message", async () => {
