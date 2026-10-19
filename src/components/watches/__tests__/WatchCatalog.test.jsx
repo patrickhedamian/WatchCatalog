@@ -173,6 +173,16 @@ describe("watch catalog components", () => {
     expect(screen.getByText("Manual winding")).toBeInTheDocument();
   });
 
+  it("associates invalid form fields with a visible validation message", async () => {
+    renderWithStore(<WatchForm watchId={null} />);
+
+    const productNumber = await screen.findByLabelText("Product number");
+    fireEvent.invalid(productNumber);
+
+    expect(productNumber).toHaveAttribute("aria-invalid", "true");
+    expect(productNumber).toHaveAccessibleDescription("Enter a valid product number.");
+  });
+
   it("submits valid product data in a create API request", async () => {
     renderWithStore(<WatchForm watchId={null} />);
 

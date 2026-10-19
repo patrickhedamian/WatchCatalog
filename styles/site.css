@@ -187,7 +187,7 @@ header.hero {
 }
 
 .watch-menu ul li button {
-  color: #b2b2c6 !important;
+  color: #dedee8 !important;
   text-transform: uppercase;
   font-weight: 400 !important;
   letter-spacing: 0.5px;
@@ -199,7 +199,7 @@ header.hero {
 .watch-menu ul li button:hover,
 .watch-menu ul li button:focus {
   background-color: #3e3e5c !important;
-  color: var(--light) !important;
+  color: #fff !important;
   border-width: 1px !important;
 }
 
@@ -488,7 +488,7 @@ header.hero {
 .catalog-intro > p:not(.catalog-eyebrow) {
   max-width: 600px;
   margin: 0 auto 1.5rem;
-  color: #656575;
+  color: #555566;
 }
 
 .catalog-eyebrow {
@@ -504,6 +504,16 @@ header.hero {
   z-index: 1;
   max-width: 980px;
   margin: 0 auto 3rem;
+}
+
+.field-error {
+  color: #b42318;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.watch-form [aria-invalid="true"] {
+  border-color: #b42318;
 }
 
 .watch-carousel-wrapper .carousel-container {
@@ -878,13 +888,13 @@ header.hero {
 }
 
 .carousel-nav-btn.disabled {
-  background: var(--less-light);
+  background: #555566;
   cursor: not-allowed;
-  opacity: 0.5;
+  opacity: 1;
 }
 
 .carousel-nav-btn.disabled .carousel-nav-icon {
-  color: #999;
+  color: #fff;
 }
 
 .carousel-nav-prev {
@@ -922,11 +932,11 @@ header.hero {
 }
 
 .carousel-nav-btn.disabled .carousel-arrow-left {
-  border-right-color: #999;
+  border-right-color: #fff;
 }
 
 .carousel-nav-btn.disabled .carousel-arrow-right {
-  border-left-color: #999;
+  border-left-color: #fff;
 }
 
 .carousel-indicators-custom {
@@ -937,12 +947,12 @@ header.hero {
 }
 
 .carousel-indicators-custom button {
-  width: 12px;
-  height: 12px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   border: 2px solid var(--primary);
   background: transparent;
-  opacity: 0.5;
+  opacity: 1;
   transition: all 0.3s ease;
   cursor: pointer;
 }

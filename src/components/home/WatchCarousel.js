@@ -91,7 +91,7 @@ function WatchCarouselInner({ watches, currentSlide, setCurrentSlide, setSlideDi
 
 function WatchCarouselSlide({ watch, animationClass, slideNumber, slideCount, isHidden = false }) {
   return (
-    <article
+    <div
       className={`card border-0 carousel-watch-card ${animationClass || ""}`}
       role="group"
       aria-roledescription="slide"
@@ -110,7 +110,7 @@ function WatchCarouselSlide({ watch, animationClass, slideNumber, slideCount, is
           <span className="btn btn-accent">Discover this watch</span>
         </div>
       </a>
-    </article>
+    </div>
   );
 }
 
