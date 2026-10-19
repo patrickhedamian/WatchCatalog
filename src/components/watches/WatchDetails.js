@@ -19,7 +19,7 @@ export default function WatchDetails({ id }) {
     return <LoadingOverlay message="Loading watch details..." />;
   }
   if (status === "failed") {
-    return <main className="container py-5" role="alert">Unable to load watch details: {error}</main>;
+    return <main id="main-content" tabIndex="-1" className="container py-5"><p role="alert">Unable to load watch details: {error}</p></main>;
   }
 
   const watch = items.find((item) => item.id === id);
@@ -28,7 +28,7 @@ export default function WatchDetails({ id }) {
   }
 
   return (
-    <main className="container catalog-page">
+    <main id="main-content" tabIndex="-1" className="container catalog-page">
       <a href="/watches" className="back-link">← Product List</a>
       <article className="watch-details">
         <div className="watch-details-image">

@@ -5,6 +5,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import ProductList from "../ProductList";
 import WatchDetails from "../WatchDetails";
 import WatchForm from "../WatchForm";
+import AppMenu from "../../layout/AppMenu";
+import { ThemeProvider } from "../../contexts/ThemeContext";
 import watchesReducer from "../../../store/watchesSlice";
 
 const productsApiUrl = "https://react-demo-enach4akbkerc5b3.southeastasia-01.azurewebsites.net/api/products";
@@ -129,6 +131,20 @@ describe("watch catalog components", () => {
     vi.unstubAllGlobals();
   });
 
+  it("provides a named navigation landmark and an operable, named theme switch", () => {
+    render(
+      <ThemeProvider>
+        <AppMenu />
+      </ThemeProvider>,
+    );
+
+    expect(screen.getByRole("navigation", { name: "Main navigation" })).toBeInTheDocument();
+    const themeSwitch = screen.getByRole("switch", { name: "Dark theme" });
+    expect(themeSwitch).not.toBeChecked();
+    fireEvent.click(themeSwitch);
+    expect(themeSwitch).toBeChecked();
+  });
+
   it("displays products returned by the mocked API", async () => {
     renderWithStore(<ProductList />);
 
@@ -140,7 +156,12 @@ describe("watch catalog components", () => {
       productsApiUrl,
       undefined,
     );
-    expect(screen.getAllByRole("link", { name: "More Info" })[0]).toHaveAttribute("href", "/watch/1");
+    expect(screen.getByRole("searchbox", { name: "Search watches" })).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent("2 watches found.");
+    expect(screen.getByRole("list", { name: "Catalog watches" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "More information about Rolex Submariner Date" }))
+      .toHaveAttribute("href", "/watch/1");
+    expect(screen.getByRole("button", { name: "Delete Rolex Submariner Date" })).toBeInTheDocument();
   });
 
   it("reads and displays the selected watch details", async () => {
@@ -214,7 +235,7 @@ describe("watch catalog components", () => {
   it("deletes a product and removes it from the displayed list", async () => {
     renderWithStore(<ProductList />);
 
-    const deleteButton = (await screen.findAllByRole("button", { name: "Delete" }))[0];
+    const deleteButton = await screen.findByRole("button", { name: "Delete Rolex Submariner Date" });
     fireEvent.click(deleteButton);
 
     await waitFor(() => {

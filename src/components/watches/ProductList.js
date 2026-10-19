@@ -35,11 +35,11 @@ export default function ProductList() {
     return <LoadingOverlay message="Loading watches..." />;
   }
   if (status === "failed") {
-    return <main className="container py-5" role="alert">Unable to load watches: {error}</main>;
+    return <main id="main-content" tabIndex="-1" className="container py-5"><p role="alert">Unable to load watches: {error}</p></main>;
   }
 
   return (
-    <main className="container catalog-page">
+    <main id="main-content" tabIndex="-1" className="container catalog-page">
       <div className="catalog-page-heading">
         <div>
           <p className="catalog-eyebrow">The collection</p>
@@ -58,32 +58,52 @@ export default function ProductList() {
           placeholder="Search by product number, name, or model"
         />
       </label>
+      <p className="visually-hidden" role="status" aria-live="polite" aria-atomic="true">
+        {filteredWatches.length} {filteredWatches.length === 1 ? "watch" : "watches"} found.
+      </p>
       {(actionError || (mutationStatus === "failed" && error)) && (
         <p className="alert alert-danger" role="alert">{actionError || error}</p>
       )}
       {mutationStatus === "loading" && <p role="status">Saving catalog changes...</p>}
-      <div className="watch-grid">
+      <ul className="watch-grid" aria-label="Catalog watches">
         {filteredWatches.map((watch) => (
-          <article className="card watch-card" key={watch.id}>
-            <a className="watch-card-image" href={`/watch/${watch.id}`}>
-              <WatchImage src={watch.imageUrl} alt={`${watch.name} ${watch.model}`} />
-            </a>
-            <div className="card-body">
-              <p className="catalog-eyebrow">{watch.productNumber} · {watch.name}</p>
-              <h2 className="h5">{watch.model}</h2>
-              <p className="watch-price">{formatPrice(watch.price)}</p>
-              <p className="watch-short-description">{watch.shortDescription}</p>
-              <div className="watch-card-actions">
-                <a href={`/watch/${watch.id}`}>More Info</a>
-                <a href={`/watches/edit/${watch.id}`}>Edit</a>
-                <button className="btn btn-link text-danger p-0" onClick={() => removeWatch(watch.id)}>
-                  Delete
-                </button>
+          <li key={watch.id}>
+            <article className="card watch-card">
+              <a className="watch-card-image" href={`/watch/${watch.id}`}>
+                <WatchImage src={watch.imageUrl} alt={`${watch.name || watch.productName || "Watch"} ${watch.model}`} />
+              </a>
+              <div className="card-body">
+                <p className="catalog-eyebrow">{watch.productNumber} · {watch.name || watch.productName}</p>
+                <h2 className="h5">{watch.model}</h2>
+                <p className="watch-price">{formatPrice(watch.price)}</p>
+                <p className="watch-short-description">{watch.shortDescription}</p>
+                <div className="watch-card-actions">
+                  <a
+                    href={`/watch/${watch.id}`}
+                    aria-label={`More information about ${watch.name || watch.productName || "watch"} ${watch.model}`}
+                  >
+                    More Info
+                  </a>
+                  <a
+                    href={`/watches/edit/${watch.id}`}
+                    aria-label={`Edit ${watch.name || watch.productName || "watch"} ${watch.model}`}
+                  >
+                    Edit
+                  </a>
+                  <button
+                    className="btn btn-link text-danger p-0"
+                    type="button"
+                    onClick={() => removeWatch(watch.id)}
+                    aria-label={`Delete ${watch.name || watch.productName || "watch"} ${watch.model}`}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
-            </div>
-          </article>
+            </article>
+          </li>
         ))}
-      </div>
+      </ul>
       {filteredWatches.length === 0 && <p>No watches match your search.</p>}
     </main>
   );

@@ -37,11 +37,11 @@ export default function Home() {
     return <LoadingOverlay message="Loading watches..." />;
   }
   if (status === "failed") {
-    return <main className="container py-5" role="alert">Unable to load watches: {error}</main>;
+    return <main id="main-content" tabIndex="-1" className="container py-5"><p role="alert">Unable to load watches: {error}</p></main>;
   }
 
   return (
-    <main>
+    <main id="main-content" tabIndex="-1">
       <section className="catalog-intro container">
         <p className="catalog-eyebrow">Time, thoughtfully selected</p>
         <h1>Find a watch that fits your style.</h1>

@@ -25,11 +25,11 @@ export default function WatchActionList({ action }) {
     return <LoadingOverlay message="Loading watches..." />;
   }
   if (status === "failed") {
-    return <main className="container py-5" role="alert">Unable to load watches: {error}</main>;
+    return <main id="main-content" tabIndex="-1" className="container py-5"><p role="alert">Unable to load watches: {error}</p></main>;
   }
 
   return (
-    <main className="container catalog-page">
+    <main id="main-content" tabIndex="-1" className="container catalog-page">
       <div className="catalog-page-heading">
         <div>
           <p className="catalog-eyebrow">Choose a product</p>
@@ -37,20 +37,27 @@ export default function WatchActionList({ action }) {
         </div>
         <a className="btn btn-outline-secondary" href="/watches">Product List</a>
       </div>
-      <div className="watch-grid">
+      <ul className="watch-grid" aria-label="Catalog watches">
         {items.map((watch) => (
-          <article className="card watch-card" key={watch.id}>
-            <a className="watch-card-image" href={info.path(watch.id)}>
-              <WatchImage src={watch.imageUrl} alt={`${watch.name} ${watch.model}`} />
-            </a>
-            <div className="card-body">
-              <p className="catalog-eyebrow">{watch.productNumber} · {watch.name}</p>
-              <h2 className="h5">{watch.model}</h2>
-              <a href={info.path(watch.id)}>{info.label}</a>
-            </div>
-          </article>
+          <li key={watch.id}>
+            <article className="card watch-card">
+              <a className="watch-card-image" href={info.path(watch.id)}>
+                <WatchImage src={watch.imageUrl} alt={`${watch.name || watch.productName || "Watch"} ${watch.model}`} />
+              </a>
+              <div className="card-body">
+                <p className="catalog-eyebrow">{watch.productNumber} · {watch.name || watch.productName}</p>
+                <h2 className="h5">{watch.model}</h2>
+                <a
+                  href={info.path(watch.id)}
+                  aria-label={`${info.label} ${watch.name || watch.productName || "watch"} ${watch.model}`}
+                >
+                  {info.label}
+                </a>
+              </div>
+            </article>
+          </li>
         ))}
-      </div>
+      </ul>
       {items.length === 0 && <p>There are no watches in the catalog yet.</p>}
     </main>
   );

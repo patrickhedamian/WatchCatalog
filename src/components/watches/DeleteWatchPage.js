@@ -32,28 +32,30 @@ export default function DeleteWatchPage({ id }) {
     return <LoadingOverlay message="Loading watch..." />;
   }
   if (status === "failed") {
-    return <main className="container py-5" role="alert">Unable to load watch: {loadError}</main>;
+    return <main id="main-content" tabIndex="-1" className="container py-5"><p role="alert">Unable to load watch: {loadError}</p></main>;
   }
   if (!watch) {
     return (
-      <main className="container py-5" role="alert">
+      <main id="main-content" tabIndex="-1" className="container py-5">
         <h1>Watch not found</h1>
+        <p role="alert">The requested watch does not exist in the catalog.</p>
         <a href="/watches">Return to the product list</a>
       </main>
     );
   }
 
   return (
-    <main className="container catalog-page">
+    <main id="main-content" tabIndex="-1" className="container catalog-page">
       <div className="watch-delete-panel">
         <p className="catalog-eyebrow">Catalog management</p>
         <h1>Delete Watch</h1>
         <p>Are you sure you want to remove <strong>{watch.name} {watch.model}</strong>?</p>
         {error && <p className="alert alert-danger" role="alert">{error}</p>}
         <div className="d-flex gap-2">
-          <button className="btn btn-danger" type="button" onClick={confirmDelete} disabled={deleting}>
+          <button className="btn btn-danger" type="button" onClick={confirmDelete} disabled={deleting} aria-busy={deleting}>
             {deleting ? "Deleting..." : "Confirm Delete"}
           </button>
+          {deleting && <span role="status">Deleting watch...</span>}
           <a className="btn btn-outline-secondary" href={`/watch/${id}`}>Cancel</a>
         </div>
       </div>

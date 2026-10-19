@@ -1,16 +1,16 @@
 export default function Header() {
   return (
-    <div className="hero py-4">
+    <header className="hero py-4">
       <div className="container">
         <div className="row align-items-start justify-content-between">
           <div className="col-lg-12 logo justify-content-center justify-content-lg-start">
             <div>
-              <img src="/images/watch-logo.png" alt="Watch Logo" />
+              <img src="/images/watch-logo.png" alt="" />
             </div>
-            <h2>Watch Catalog</h2>
+            <p>Watch Catalog</p>
           </div>
         </div>
       </div>
-    </div>
+    </header>
   );
 }

@@ -71,13 +71,13 @@ export default function WatchForm({ watchId }) {
     return <LoadingOverlay message="Loading watch form..." />;
   }
   if (status === "failed") {
-    return <main className="container py-5" role="alert">Unable to load watches: {error}</main>;
+    return <main id="main-content" tabIndex="-1" className="container py-5"><p role="alert">Unable to load watches: {error}</p></main>;
   }
   if (isEditing && !watch) {
     return (
-      <main className="container py-5" role="alert">
+      <main id="main-content" tabIndex="-1" className="container py-5">
         <h1>Watch not found</h1>
-        <p>No watch with ID {watchId} exists in the catalog.</p>
+        <p role="alert">No watch with ID {watchId} exists in the catalog.</p>
         <a href="/watches">Return to the product list</a>
       </main>
     );
@@ -100,7 +100,7 @@ export default function WatchForm({ watchId }) {
   ];
 
   return (
-    <main className="container catalog-page">
+    <main id="main-content" tabIndex="-1" className="container catalog-page">
       <div className="catalog-page-heading">
         <div>
           <p className="catalog-eyebrow">Catalog management</p>

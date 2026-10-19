@@ -24,12 +24,18 @@ function WatchCarouselInner({ watches, currentSlide, setCurrentSlide, setSlideDi
   const isLast = currentSlide === watches.length - 1;
 
   return (
-    <section className="watch-carousel-wrapper" aria-label="Featured watches">
+    <section
+      className="watch-carousel-wrapper"
+      aria-label="Featured watches"
+      aria-roledescription="carousel"
+    >
       <div className="carousel-container">
         <div className="carousel-slide-wrapper">
-          <div className="carousel-slide-content">
+          <div className="carousel-slide-content" aria-live="polite" aria-atomic="true">
             <WatchCarouselSlide
               watch={watches[currentSlide]}
+              slideNumber={currentSlide + 1}
+              slideCount={watches.length}
               animationClass={
                 isAnimating && slideDirection === "next"
                   ? "slide-in-right"
@@ -41,7 +47,10 @@ function WatchCarouselInner({ watches, currentSlide, setCurrentSlide, setSlideDi
             {isAnimating && previousSlideIndex !== null && watches[previousSlideIndex] && (
               <WatchCarouselSlide
                 watch={watches[previousSlideIndex]}
+                slideNumber={previousSlideIndex + 1}
+                slideCount={watches.length}
                 animationClass={slideDirection === "next" ? "slide-out-left" : "slide-out-right"}
+                isHidden
               />
             )}
           </div>
@@ -70,7 +79,7 @@ function WatchCarouselInner({ watches, currentSlide, setCurrentSlide, setSlideDi
             type="button"
             onClick={() => goToSlide(index)}
             className={index === currentSlide ? "active" : ""}
-            aria-current={index === currentSlide}
+            aria-current={index === currentSlide ? "true" : undefined}
             aria-label={`Show ${watch.name} ${watch.model}`}
             disabled={isAnimating}
           />
@@ -80,9 +89,16 @@ function WatchCarouselInner({ watches, currentSlide, setCurrentSlide, setSlideDi
   );
 }
 
-function WatchCarouselSlide({ watch, animationClass }) {
+function WatchCarouselSlide({ watch, animationClass, slideNumber, slideCount, isHidden = false }) {
   return (
-    <article className={`card border-0 carousel-watch-card ${animationClass || ""}`}>
+    <article
+      className={`card border-0 carousel-watch-card ${animationClass || ""}`}
+      role="group"
+      aria-roledescription="slide"
+      aria-label={`${slideNumber} of ${slideCount}: ${watch.name} ${watch.model}`}
+      aria-hidden={isHidden}
+      inert={isHidden}
+    >
       <a href={`/watch/${watch.id}`} className="watch-slide-link">
         <div className="watch-slide-image-wrap">
           <WatchImage src={watch.imageUrl} alt={`${watch.name} ${watch.model}`} className="watch-slide-image" />

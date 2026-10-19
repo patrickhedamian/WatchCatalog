@@ -29,6 +29,7 @@ export default function Layout({ url }) {
   return (
     <StoreProvider>
       <ThemeProvider>
+        <a className="skip-link" href="#main-content">Skip to main content</a>
         <Header />
         <AppMenu />
         <ThemeSurface>
